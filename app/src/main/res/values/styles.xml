@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <dimen name="spacing_gigante">32dp</dimen>
+    <dimen name="spacing_grande">24dp</dimen>
+    <dimen name="spacing_normal">16dp</dimen>
+    <dimen name="spacing_pequeno">8dp</dimen>
+    <dimen name="spacing_micro">4dp</dimen>
+
+    <dimen name="font_gigante">22sp</dimen>
+    <dimen name="font_grande">18sp</dimen>
+    <dimen name="font_normal">14sp</dimen>
+    <dimen name="font_pequena">12sp</dimen>
+    <dimen name="font_micro">11sp</dimen>
+
+
+</resources>
