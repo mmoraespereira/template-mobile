@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrganicoFragment extends Fragment {
+public class OrganicoFragment extends Fragment implements OrganicoAdapter.OrganicoListener {
 
     private FragmentOrganicoBinding mBinding;
     private List<Organico> mOrganicos;
@@ -56,7 +57,7 @@ public class OrganicoFragment extends Fragment {
         mOrganicos = new ArrayList<>();
 
         // Inicializa o recycler view
-        OrganicoAdapter adapter = new OrganicoAdapter(mOrganicos);
+        OrganicoAdapter adapter = new OrganicoAdapter(mOrganicos, this);
         LinearLayoutManager layout = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
 
         mBinding.organicoRecyclerView.setAdapter(adapter);
@@ -132,6 +133,16 @@ public class OrganicoFragment extends Fragment {
         // Exibe um snackbar com a mensagem de erro
         Snackbar.make(mBinding.getRoot(), R.string.organico_erro_webservice, Snackbar.LENGTH_SHORT)
                 .show();
+    }
+
+    @Override
+    public void onOrganicoClick(final Organico organico) {
+        Toast.makeText(getContext(), "Clicou no card", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFotoClick(final Organico organico) {
+        Toast.makeText(getContext(), "Clicou na foto", Toast.LENGTH_SHORT).show();
     }
 
 }

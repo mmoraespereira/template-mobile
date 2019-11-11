@@ -3,19 +3,24 @@ package br.utp.sustentabilidade.widgets.adapters;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import br.utp.sustentabilidade.R;
 import br.utp.sustentabilidade.databinding.ItemOrganicoBinding;
 import br.utp.sustentabilidade.models.Organico;
 
 public class OrganicoAdapter extends RecyclerView.Adapter<OrganicoAdapter.OrganicoViewHolder> {
 
     private final List<Organico> mOrganicos;
+    private final OrganicoListener mListener;
 
-    public OrganicoAdapter(List<Organico> organicos) {
+    public OrganicoAdapter(List<Organico> organicos, OrganicoListener listener) {
         mOrganicos = organicos;
+        mListener = listener;
     }
 
     @NonNull
@@ -37,6 +42,14 @@ public class OrganicoAdapter extends RecyclerView.Adapter<OrganicoAdapter.Organi
     }
 
     /**
+     * Eventos de callback do adapter.
+     */
+    public interface OrganicoListener {
+        void onOrganicoClick(Organico organico);
+        void onFotoClick(Organico organico);
+    }
+
+    /**
      * Armazena os dados da view.
      */
     class OrganicoViewHolder extends RecyclerView.ViewHolder {
@@ -51,9 +64,16 @@ public class OrganicoAdapter extends RecyclerView.Adapter<OrganicoAdapter.Organi
         public void bind(final Organico organico) {
             mBinding.setOrganico(organico);
 
-            // TODO: Exibir foto
+            // Exibir foto
+            Glide.with(mBinding.organicoImgFoto.getContext())
+                    .load(organico.getFoto())
+                    .error(R.drawable.ic_placeholder)
+                    .placeholder(R.drawable.ic_placeholder)
+                    .into(mBinding.organicoImgFoto);
 
-            // TODO: Amarrar eventos
+            // Amarrar eventos
+            mBinding.organicoImgFoto.setOnClickListener(v -> mListener.onFotoClick(organico));
+            mBinding.organicoCard.setOnClickListener(v -> mListener.onOrganicoClick(organico));
         }
     }
 }
