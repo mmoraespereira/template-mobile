@@ -1,16 +1,13 @@
 package br.utp.sustentabilidade.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,28 +15,40 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import br.utp.sustentabilidade.R;
+import br.utp.sustentabilidade.activities.ReciclagemAddActivity;
+import br.utp.sustentabilidade.activities.ReciclagemDetalhesActivity;
 import br.utp.sustentabilidade.databinding.FragmentOrganicoBinding;
+import br.utp.sustentabilidade.databinding.FragmentReciclagemBinding;
 import br.utp.sustentabilidade.models.Organico;
+import br.utp.sustentabilidade.models.Reciclagem;
 import br.utp.sustentabilidade.models.RespostaJSON;
 import br.utp.sustentabilidade.network.NetworkManager;
 import br.utp.sustentabilidade.widgets.adapters.OrganicoAdapter;
+import br.utp.sustentabilidade.widgets.adapters.ReciclagemAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrganicoFragment extends Fragment {
+public class ReciclagemFragment extends Fragment implements ReciclagemAdapter.ReciclagemListener {
 
-    private FragmentOrganicoBinding mBinding;
-    private List<Organico> mOrganicos;
-
+    private FragmentReciclagemBinding mBinding;
+    private List<Reciclagem> mReciclagem;
+    private FloatingActionButton fab;
     /**
      * Construtor de fragmentos.
      *
      * @return Retorna uma instância do fragmento de produtos orgânicos.
      */
-    public static OrganicoFragment newInstance() {
-        return new OrganicoFragment();
+    public static ReciclagemFragment newInstance() {
+        return new ReciclagemFragment();
     }
 
     @Override
@@ -50,23 +59,34 @@ public class OrganicoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_organico, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reciclagem, container, false);
 
         // Inicializa a lista de produtos orgânicos
-        mOrganicos = new ArrayList<>();
+        mReciclagem = new ArrayList<>();
 
         // Inicializa o recycler view
-        OrganicoAdapter adapter = new OrganicoAdapter(mOrganicos);
+        ReciclagemAdapter adapter = new ReciclagemAdapter(mReciclagem, this);
         LinearLayoutManager layout = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
 
-        mBinding.organicoRecyclerView.setAdapter(adapter);
-        mBinding.organicoRecyclerView.setLayoutManager(layout);
+        mBinding.reciclagemRecyclerView.setAdapter(adapter);
+        mBinding.reciclagemRecyclerView.setLayoutManager(layout);
 
         // Exibe a progressbar
         mBinding.organicoLoading.setVisibility(View.VISIBLE);
 
         // Chama o Webservice
         carregarWebService(0);
+
+        //Acão adicionar
+        fab = (FloatingActionButton) mBinding.fab;
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(),ReciclagemAddActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return mBinding.getRoot();
     }
@@ -93,33 +113,33 @@ public class OrganicoFragment extends Fragment {
     }
 
     private void carregarWebService(final int pagina) {
-        Call<RespostaJSON<List<Organico>>> call = NetworkManager.service().listarOrganicos(0);
-        call.enqueue(new Callback<RespostaJSON<List<Organico>>>() {
+        Call<RespostaJSON<List<Reciclagem>>> call = NetworkManager.service().listarReciclagems(0);
+        call.enqueue(new Callback<RespostaJSON<List<Reciclagem>>>() {
 
             @Override
-            public void onResponse(final Call<RespostaJSON<List<Organico>>> call, final Response<RespostaJSON<List<Organico>>> response) {
-                RespostaJSON<List<Organico>> resposta = response.body();
+            public void onResponse(final Call<RespostaJSON<List<Reciclagem>>> call, final Response<RespostaJSON<List<Reciclagem>>> response) {
+                RespostaJSON<List<Reciclagem>> resposta = response.body();
                 Log.d("TAG", "onResponse: " + resposta);
                 Log.d("TAG", "onResponse: " + resposta.getStatus());
                 if (resposta != null && resposta.getStatus() == 0) {
-                    atualizarListaOrganicos(resposta.getObject());
+                    atualizarListaReciclagem(resposta.getObject());
                 } else {
                     exibirMensagemErro();
                 }
             }
 
             @Override
-            public void onFailure(final Call<RespostaJSON<List<Organico>>> call, final Throwable t) {
-                Log.e("TAG", "onFailure: ",t );
+            public void onFailure(final Call<RespostaJSON<List<Reciclagem>>> call, final Throwable t) {
+                Log.e("TAG", "onFailure: ", t);
                 exibirMensagemErro();
             }
         });
     }
 
-    private void atualizarListaOrganicos(final List<Organico> organicos) {
+    private void atualizarListaReciclagem(final List<Reciclagem> reciclagem) {
         // Atualiza os elementos da lista
-        mOrganicos.addAll(organicos);
-        mBinding.organicoRecyclerView.getAdapter().notifyDataSetChanged();
+        mReciclagem.addAll(reciclagem);
+        mBinding.reciclagemRecyclerView.getAdapter().notifyDataSetChanged();
 
         // Esconde a progressbar
         mBinding.organicoLoading.setVisibility(View.GONE);
@@ -134,4 +154,25 @@ public class OrganicoFragment extends Fragment {
                 .show();
     }
 
+    @Override
+    public void onReciclagemClick(final Reciclagem reciclagem) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString("id", reciclagem.getId());
+        bundle.putString("titulo", reciclagem.getTitulo());
+        bundle.putString("descricao", reciclagem.getDescricao());
+        bundle.putString("img", reciclagem.getFoto());
+
+        Log.d("Fragmento", "onReciclagemClick: " + reciclagem.getId());
+
+        Intent intent = new Intent(getContext(), ReciclagemDetalhesActivity.class);
+        intent.putExtra("reciclagem", bundle);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onFotoClick(final Reciclagem reciclagem) {
+
+    }
 }

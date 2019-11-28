@@ -22,6 +22,7 @@ android {
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+
     }
 
     // Habilita o databinding
@@ -50,8 +51,8 @@ dependencies {
     // Biblioteca para imagens circulares
     implementation 'de.hdodenhof:circleimageview:3.0.1'
 
-    // Biblioteca para uso de imagens
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
+    implementation 'com.google.android.material:material:1.0.0-rc01'
 }

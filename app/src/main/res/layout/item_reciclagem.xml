@@ -7,13 +7,14 @@
     <data>
 
         <variable
-            name="organico"
-            type="br.utp.sustentabilidade.models.Organico" />
+            name="reciclagem"
+            type="br.utp.sustentabilidade.models.Reciclagem" />
     </data>
 
-    <!-- 2. DEFINIÇÃO DO LAYOUT -->
+     <!-- DEFINIÇÃO DO LAYOUT -->
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/reciclagem_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/spacing_pequeno"
@@ -27,7 +28,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/organico_img_foto"
+                android:id="@+id/reciclagem_img_foto"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
@@ -38,21 +39,21 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/organico_txt_titulo"
+                android:id="@+id/reciclagem_txt_titulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="@{organico.titulo}"
+                android:text="@{reciclagem.titulo}"
                 android:textColor="@color/blue"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/organico_img_foto"
+                app:layout_constraintStart_toEndOf="@+id/reciclagem_img_foto"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/organico_txt_descricao"
+                android:id="@+id/reciclagem_txt_descricao"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -60,11 +61,11 @@
                 android:layout_marginEnd="16dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@{organico.descricao}"
+                android:text="@{reciclagem.descricao}"
                 android:textColor="@color/green"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/organico_img_foto"
-                app:layout_constraintTop_toBottomOf="@+id/organico_txt_titulo" />
+                app:layout_constraintStart_toEndOf="@+id/reciclagem_img_foto"
+                app:layout_constraintTop_toBottomOf="@+id/reciclagem_txt_titulo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
